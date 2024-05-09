@@ -38,6 +38,7 @@ public static class CommonApiExtensions
                 options.SwaggerEndpoint(
                     $"/swagger/{description.GroupName}/swagger.json",
                     description.GroupName.ToUpperInvariant());
+                options.RoutePrefix = "";
             }
         });
         return app;
