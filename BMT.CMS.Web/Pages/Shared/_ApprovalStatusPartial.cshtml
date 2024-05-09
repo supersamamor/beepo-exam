@@ -1,0 +1,19 @@
+@model string
+
+
+@if (Model == BMT.CMS.Core.CMS.ApprovalStatus.ForApproval)
+{
+    <h4><span class="badge bg-info">@Model</span></h4>
+}
+else if (Model == BMT.CMS.Core.CMS.ApprovalStatus.PartiallyApproved)
+{
+    <h4><span class="badge bg-primary">@Model</span></h4>
+}
+else if (Model == BMT.CMS.Core.CMS.ApprovalStatus.Approved)
+{
+    <h4><span class="badge bg-success">@Model</span></h4>
+}
+else if (Model == BMT.CMS.Core.CMS.ApprovalStatus.Rejected)
+{
+    <h4><span class="badge bg-danger">@Model</span></h4>
+}

@@ -1,0 +1,40 @@
+@using Models
+@model ContactInformationViewModel
+
+<div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1">
+    <div class="col">
+        <div class="mb-3">
+            <label asp-for="@Model.FirstName" class="form-label"><strong>@Localizer["First Name"] :</strong></label>
+            <input asp-for="@Model.FirstName" class="form-control" maxlength="255" />
+            <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col">
+        <div class="mb-3">
+            <label asp-for="@Model.LastName" class="form-label"><strong>@Localizer["Last Name"] :</strong></label>
+            <input asp-for="@Model.LastName" class="form-control" maxlength="255" />
+            <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col">
+        <div class="mb-3">
+            <label asp-for="@Model.CompanyName" class="form-label"><strong>@Localizer["Company Name"] :</strong></label>
+            <input asp-for="@Model.CompanyName" class="form-control" maxlength="255" />
+            <span asp-validation-for="@Model.CompanyName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col">
+        <div class="mb-3">
+            <label asp-for="@Model.Mobile" class="form-label"><strong>@Localizer["Mobile"] :</strong></label>
+            <input asp-for="@Model.Mobile" class="form-control Mobile" maxlength="255" />
+            <span asp-validation-for="@Model.Mobile" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col">
+        <div class="mb-3">
+            <label asp-for="@Model.Email" class="form-label"><strong>@Localizer["Email"] :</strong></label>
+            <input asp-for="@Model.Email" class="form-control" maxlength="255" />
+            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,192 @@
+@page
+@model IndexModel
+
+@section Styles {
+<partial name="_DataTableStyles" />
+}
+@{
+    ViewData["Title"] = Localizer["Contact Information List"];
+    ViewData["ActiveMainPage"] = "ContactInformation";
+    ViewData["Level1"] = "CMS";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="contactInformation" class="table table-hover table-bordered table-striped responsive nowrap" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+								@Localizer["First Name"]
+							</th>
+							<th>
+								@Localizer["Last Name"]
+							</th>
+							<th>
+								@Localizer["Company Name"]
+							</th>
+							<th>
+								@Localizer["Mobile"]
+							</th>
+							<th>
+								@Localizer["Email"]
+							</th>
+							  
+							<th>
+								@Localizer["Status"]
+							</th> 							
+                            <th>
+                                @Localizer["Actions"]
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<div id="BatchUploadPartialContainer">
+    <partial name="_BatchUpload" model="Model.BatchUpload" />
+</div>
+@section Scripts {
+<partial name="_DataTableScripts" />
+<script asp-add-nonce>
+    $(document).ready(function () {
+        var table = $('#contactInformation').DataTable({
+            select: false,
+            serverSide: true,
+            order: [[ 6, 'desc' ]],
+            ajax:
+            {
+                url: '@Url.Page("/ContactInformation/Index", new { area = "CMS", handler = "ListAll" })',
+                type: "POST",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+            },
+			initComplete: function( settings, json ) {
+                BindTableRowCollapseEvent();
+            },
+			columns: [
+                { data: "firstName", name: "FirstName", responsivePriority: 1, title: '@Localizer["First Name"]', searchable: true },
+				{ data: "lastName", name: "LastName", responsivePriority: 1, title: '@Localizer["Last Name"]', searchable: true },
+				{ data: "companyName", name: "CompanyName", responsivePriority: 1, title: '@Localizer["Company Name"]', searchable: true },
+				{ data: "mobile", name: "Mobile", responsivePriority: 1, title: '@Localizer["Mobile"]', searchable: true },
+				{ data: "email", name: "Email", responsivePriority: 1, title: '@Localizer["Email"]', searchable: true },
+				   
+				{ data: "statusBadge", name: "StatusBadge", responsivePriority: 1, title: '@Localizer["Approval Status"]', searchable: false, orderable: false },
+                {
+                    data: null,
+                    searchable: false,
+                    orderable: false,
+                    responsivePriority: 2,
+                    width: "10%",
+                    render: function (data, type, row, meta) {
+                        var url = '@Url.Page("/ContactInformation/Details", new { area = "CMS" })' + '?id=' + row.id;
+                        var button = '<a href="' + url + '" class="btn btnMaterial btn-flat primary semicircle btnViewContactInformation" title="@Localizer["View"]"><i class="far fa-eye"></i></a>';
+                @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ContactInformation.Edit)).Succeeded)
+                {
+                    <text>
+                        url = '@Url.Page("/ContactInformation/Edit", new { area = "CMS" })' + '?id=' + row.id;
+                        button =  button + '&nbsp;<a href="' + url + '" class="btn btnMaterial btn-flat success semicircle btnEditContactInformation" title="@Localizer["Edit"]"><i class="fas fa-pen"></i></a>';
+                    </text>
+                }
+                @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ContactInformation.Delete)).Succeeded)
+                {
+                    <text>
+                        url = '@Url.Page("/ContactInformation/Delete", new { area = "CMS" })' + '?id=' + row.id;
+                        button =  button + '&nbsp;<a href="' + url + '" class="btn btnMaterial btn-flat accent semicircle btnDeleteContactInformation" title="@Localizer["Delete"]"><i class="fas fa-trash btnNoBorders"></i></a>';
+                    </text>
+                }
+				@if ((await AuthorizationService.AuthorizeAsync(User, Permission.ContactInformation.Approve)).Succeeded)
+				{
+					<text>
+						url = '@Url.Page("/ContactInformation/Approve", new { area = "CMS" })' + '?id=' + row.id;
+						button =  button + '&nbsp;<a href="' + url + '" class="btn btnMaterial btn-flat primary semicircle" title="@Localizer["Approve"]"><i class="fas fa-check"></i></a>';
+					</text>
+				}  
+				@if ((await AuthorizationService.AuthorizeAsync(User, Permission.ContactInformation.History)).Succeeded)
+				{
+					<text>
+						url = '@Url.Page("/ContactInformation/History", new { area = "CMS" })' + '?id=' + row.id;
+						button =  button + '&nbsp;<a href="' + url + '" class="btn btnMaterial btn-flat primary semicircle" title="@Localizer["History"]"><i class="fas fa-history"></i></a>';
+					</text>
+				} 
+                        return button;
+                    },
+                },
+                { data: "lastModifiedDate", name: "LastModifiedDate", title: '@Localizer["Last Modified Date"]', visible: false, searchable: false },
+                { data: "id", name: "Id", visible: false },
+            ],
+            buttons: [
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ContactInformation.Create)).Succeeded)
+        {
+            <text>
+                {
+                    text: '@Localizer["Add"]',
+                    action: function (e, dt, button, config) {
+                        var url = '@Url.Page("/ContactInformation/Add", new { area = "CMS" })';
+                        window.location.href = url;
+                    },
+                    className: 'btn btn-success text-light',
+                },
+            </text>
+        }
+		@if ((await AuthorizationService.AuthorizeAsync(User, Permission.ContactInformation.Upload)).Succeeded)
+        {
+            <text>
+                {
+                    text: 'Download Template',
+                    action: function () {
+                        // Trigger the hidden file input
+                        $('#download-template-form').submit();   
+                    },
+                    className: 'btn btn-secondary text-light',
+                },
+            </text>
+        }
+        @if ((await AuthorizationService.AuthorizeAsync(User, Permission.ContactInformation.Upload)).Succeeded)
+        {
+            <text>
+                {
+                    text: 'Upload',
+                    action: function () {
+                        // Trigger the hidden file input
+                        $('#btnBatchUpload').click();
+                    },
+                    className: 'btn btn-info text-light',
+                },
+            </text>
+        }
+                'excel', 'pdf', 'pageLength',
+            ],
+        });
+        var debounce = new $.fn.dataTable.Debounce(table); // Add delay to search
+
+        $('.btn-table_filter').on('click', function(e) {
+            table.ajax.reload(null, false);
+        });
+		function BindTableRowCollapseEvent()
+        {
+            $('#contactInformation tbody').on('click', 'td.dtr-control', function () {
+                $.showAjaxLoaderOnClick([".btnAddContactInformation",".btnEditContactInformation",".btnViewContactInformation",".btnDeleteContactInformation"]);
+            });
+        }
+        $.showAjaxLoaderOnClick([".btnAddContactInformation",".btnEditContactInformation",".btnViewContactInformation",".btnDeleteContactInformation"]);
+        $.EnableNavbarSearch(table);
+		$('#btnBatchUpload').on('change', function (e) {
+            $('#batch-upload-form').submit();          
+        });
+        @if (!string.IsNullOrEmpty(Model.BatchUpload.BatchUploadFileName))
+        {
+            <text>
+                $('#btnDownloadBatchUploadTemplateLink')[0].click();             
+            </text>
+        }
+    });
+</script>
+}

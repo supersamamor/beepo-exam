@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Authors>Samuel Amor</Authors>
+		<Company>SuperSam</Company>
+		<Description>A library containing functionality related to data access.</Description>
+		<Copyright>Copyright 2022 SuperSam</Copyright>
+		<Version>1.0.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>	
+		<PackageReference Include="LanguageExt.Core" Version="4.4.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\BMT.Common.Core.Base\BMT.Common.Core.Base.csproj" />
+		<ProjectReference Include="..\BMT.Common.Identity.Abstractions\BMT.Common.Identity.Abstractions.csproj" />
+	</ItemGroup>
+</Project>

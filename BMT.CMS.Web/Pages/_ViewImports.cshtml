@@ -1,0 +1,18 @@
+@using BMT.CMS.Web
+@using BMT.CMS.Infrastructure.Data;
+@using BMT.Common.Web.Utility.Authorization
+@using BMT.CMS.Web.Pages.Shared;
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Configuration
+@using BMT.CMS.Core.Identity;
+@namespace BMT.CMS.Web.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, NetEscapades.AspNetCore.SecurityHeaders.TagHelpers
+@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@inject IHtmlLocalizer<SharedResource> Localizer
+@inject UserManager<ApplicationUser> UserManager
+@inject IAuthorizationService AuthorizationService
+@inject IConfiguration Configuration
+@inject BMT.CMS.Web.Service.DropdownServices dropdownService
